@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Medical Continuity</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('partials/navbar') %>
+
+<!-- Hero -->
+<section class="hero-section">
+  <div class="container text-center">
+    <span style="background:rgba(255,255,255,0.2);color:white;border-radius:50px;padding:4px 18px;font-size:0.85rem;font-weight:600;display:inline-block;margin-bottom:1rem">🔒 Secure Health Records Platform</span>
+    <h1 class="mb-3">Your Medical Records.<br>Safe. Accessible. Always.</h1>
+    <p class="mb-4" style="max-width:580px;margin:auto">Register once. Get a personal QR code. Emergency responders see critical info instantly. Doctors access full records only with your OTP consent.</p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="/patient/register" class="btn btn-outline-light btn-lg">Create Health ID</a>
+      <a href="/doctor/register"  class="btn btn-outline-light btn-lg">Doctor Registration</a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4"><div class="stats-card"><span class="stats-number">30%</span><span class="stats-label">Misdiagnosis Rate</span></div></div>
+      <div class="col-md-4"><div class="stats-card"><span class="stats-number">$20B</span><span class="stats-label">Wasted Annually</span></div></div>
+      <div class="col-md-4"><div class="stats-card"><span class="stats-number">45m</span><span class="stats-label">Average Delay</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="py-5" id="features" style="background:white">
+  <div class="container">
+    <h2 class="section-title text-center">How It Works</h2>
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="feature-card text-center">
+          <div class="icon">📋</div>
+          <h5>Patient Registers</h5>
+          <p class="text-muted" style="font-size:0.9rem">Fill medical history, medicines, photo, emergency contact. Get a personal QR code.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="feature-card text-center">
+          <div class="icon">📱</div>
+          <h5>QR Scanned (Public)</h5>
+          <p class="text-muted" style="font-size:0.9rem">Anyone who scans sees ONLY the emergency contact name and phone number.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="feature-card text-center">
+          <div class="icon">🔐</div>
+          <h5>Doctor OTP Access</h5>
+          <p class="text-muted" style="font-size:0.9rem">Doctor logs in, enters patient phone. OTP sent to patient. Doctor sees full records after OTP.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="feature-card text-center">
+          <div class="icon">🛡️</div>
+          <h5>Admin Control</h5>
+          <p class="text-muted" style="font-size:0.9rem">Admin manages reports, approves doctors, manages all patient records.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Steps -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="section-title text-center">3 Simple Steps</h2>
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="card-box">
+          <div style="width:50px;height:50px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:1.2rem;margin:0 auto 1rem">1</div>
+          <h5>Register & Get QR</h5>
+          <p class="text-muted" style="font-size:0.9rem">Enter your details, medical history and medicines. Download your QR card.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-box">
+          <div style="width:50px;height:50px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:1.2rem;margin:0 auto 1rem">2</div>
+          <h5>Carry Your QR</h5>
+          <p class="text-muted" style="font-size:0.9rem">Print it on your ID card or save on phone. In emergency anyone can scan it.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-box">
+          <div style="width:50px;height:50px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:1.2rem;margin:0 auto 1rem">3</div>
+          <h5>Doctor OTP Unlock</h5>
+          <p class="text-muted" style="font-size:0.9rem">Doctors request OTP. Patient receives it on phone. Full history unlocked securely.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Patient Records</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('../partials/navbar') %>
+<div class="container py-5">
+
+  <!-- Patient Header -->
+  <div class="card-box mb-4">
+    <div class="row align-items-center g-3">
+      <div class="col-auto">
+        <% if (patient.photo) { %>
+          <img src="<%= patient.photo %>" class="patient-photo">
+        <% } else { %>
+          <div class="patient-photo-placeholder">👤</div>
+        <% } %>
+      </div>
+      <div class="col">
+        <h3 style="color:var(--green);font-weight:800;margin:0"><%= patient.name %></h3>
+        <p class="text-muted mb-1">📞 <%= patient.phone %> &nbsp;|&nbsp;
+          <% if(patient.gender){%><%= patient.gender %> &nbsp;|&nbsp;<% } %>
+          <% if(patient.dateOfBirth){%>DOB: <%= patient.dateOfBirth %><% } %>
+        </p>
+        <% if(patient.address){%><p class="text-muted small mb-1">📍 <%= patient.address %></p><% } %>
+        <div class="mt-1">
+          <% if(patient.bloodGroup){   %><span class="badge-red    me-1">🩸 <%= patient.bloodGroup %></span><% } %>
+          <% if(patient.allergies){    %><span class="badge-yellow me-1">⚠️ <%= patient.allergies %></span><% } %>
+          <% if(patient.chronicDiseases){%><span class="badge-blue me-1">🏥 <%= patient.chronicDiseases %></span><% } %>
+        </div>
+      </div>
+      <div class="col-md-3 text-md-end">
+        <div style="background:var(--green-light);border-radius:10px;padding:0.75rem;text-align:center">
+          <p class="mb-1 small text-muted">🆘 Emergency Contact</p>
+          <strong style="color:var(--green-dark)"><%= patient.emergencyName %></strong>
+          <% if(patient.emergencyRelation){%><br><small class="text-muted">(<%= patient.emergencyRelation %>)</small><% } %>
+          <p style="color:var(--danger);font-weight:700;margin:4px 0 0"><%= patient.emergencyContact %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Medicines -->
+    <div class="col-md-6">
+      <div class="card-box h-100">
+        <h5 style="color:var(--green);margin-bottom:1rem">💊 Medicines (Last 1 Year)</h5>
+        <% if (!patient.medicines || patient.medicines.length === 0) { %>
+          <p class="text-muted">No medicines recorded.</p>
+        <% } else { %>
+          <% patient.medicines.forEach(m => { %>
+            <% if(m.name) { %>
+            <div class="med-card">
+              <h6><%= m.name %></h6>
+              <% if(m.dosage)   {%><span class="text-muted small">Dosage: <strong><%= m.dosage %></strong> &nbsp;</span><% } %>
+              <% if(m.duration) {%><span class="text-muted small">Duration: <strong><%= m.duration %></strong> &nbsp;</span><% } %>
+              <% if(m.reason)   {%><br><span class="text-muted small">Reason: <strong><%= m.reason %></strong></span><% } %>
+            </div>
+            <% } %>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Medical History -->
+    <div class="col-md-6">
+      <div class="card-box h-100">
+        <h5 style="color:var(--green);margin-bottom:1rem">📋 Medical History</h5>
+        <% if (!patient.medicalHistory || patient.medicalHistory.length === 0) { %>
+          <p class="text-muted">No medical history recorded.</p>
+        <% } else { %>
+          <% patient.medicalHistory.forEach(h => { %>
+            <% if(h.date || h.diagnosis) { %>
+            <div class="hist-card">
+              <h6><%= h.diagnosis || 'Treatment' %></h6>
+              <% if(h.date)      {%><span class="text-muted small">📅 <%= h.date %> &nbsp;</span><% } %>
+              <% if(h.hospital)  {%><span class="text-muted small">🏥 <%= h.hospital %> &nbsp;</span><% } %>
+              <% if(h.doctor)    {%><span class="text-muted small">👨‍⚕️ <%= h.doctor %></span><% } %>
+              <% if(h.treatment) {%><br><span class="text-muted small">Treatment: <strong><%= h.treatment %></strong></span><% } %>
+            </div>
+            <% } %>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Medical Reports (uploaded by admin) -->
+    <div class="col-12">
+      <div class="card-box">
+        <h5 style="color:var(--green);margin-bottom:1rem">🗂️ Medical Reports (<%= records.length %>)</h5>
+        <% if (records.length === 0) { %>
+          <p class="text-muted">No reports uploaded yet.</p>
+        <% } else { %>
+          <div class="row g-3">
+            <% records.forEach(r => { %>
+            <div class="col-md-4">
+              <div class="card-box" style="padding:1rem">
+                <div class="d-flex justify-content-between mb-1">
+                  <strong style="font-size:0.9rem"><%= r.title %></strong>
+                  <small class="text-muted"><%= new Date(r.date).toLocaleDateString('en-IN') %></small>
+                </div>
+                <% if(r.description){%><p class="text-muted small"><%= r.description %></p><% } %>
+                <% if(r.reportImage){%>
+                  <a href="<%= r.reportImage %>" target="_blank">
+                    <img src="<%= r.reportImage %>" class="img-fluid rounded" style="max-height:140px;width:100%;object-fit:cover">
+                  </a>
+                <% } %>
+              </div>
+            </div>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+  </div><!-- end row -->
+
+  <div class="mt-4">
+    <a href="/doctor/dashboard" class="btn btn-outline-primary">← Back to Dashboard</a>
+  </div>
+
+</div>
+<%- include('../partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

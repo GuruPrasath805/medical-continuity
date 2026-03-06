@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>QR Ready – Medical Continuity</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('../partials/navbar') %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card-box text-center">
+        <div style="font-size:3rem" class="mb-2">✅</div>
+        <h2 style="color:var(--green);font-weight:800">Registration Successful!</h2>
+        <p class="text-muted mb-4">Your Health ID and QR code have been created.</p>
+
+        <!-- QR Code -->
+        <div style="background:white;border:3px solid var(--green);padding:16px;border-radius:16px;display:inline-block;margin-bottom:1.5rem">
+          <img src="<%= patient.qrCode %>" alt="QR Code" style="width:220px;height:220px">
+        </div>
+
+        <!-- Patient summary -->
+        <div class="text-start p-3 rounded mb-3" style="background:var(--green-light);border:1.5px solid var(--border)">
+          <div class="d-flex align-items-center gap-3 mb-2">
+            <% if (patient.photo) { %>
+              <img src="<%= patient.photo %>" class="patient-photo" style="width:60px;height:60px">
+            <% } else { %>
+              <div class="patient-photo-placeholder" style="width:60px;height:60px;font-size:1.4rem">👤</div>
+            <% } %>
+            <div>
+              <h5 class="mb-0" style="color:var(--green-dark)"><%= patient.name %></h5>
+              <small class="text-muted">📞 <%= patient.phone %></small>
+            </div>
+          </div>
+          <% if (patient.bloodGroup) { %><span class="badge-red me-2">🩸 <%= patient.bloodGroup %></span><% } %>
+          <% if (patient.allergies)  { %><span class="badge-yellow me-2">⚠️ <%= patient.allergies %></span><% } %>
+        </div>
+
+        <!-- What QR shows info -->
+        <div class="alert-info p-3 rounded text-start mb-4">
+          <strong>📱 When someone scans your QR:</strong><br>
+          <span style="color:#1d4ed8">Public view</span> → Shows only emergency contact: <strong><%= patient.emergencyName %> (<%= patient.emergencyContact %>)</strong><br>
+          <span style="color:#1d4ed8">Doctor view</span> → Must login + enter OTP sent to your phone to see full records
+        </div>
+
+        <div class="d-flex gap-2 justify-content-center">
+          <a href="<%= patient.qrCode %>" download="my-health-qr.png" class="btn btn-primary">⬇ Download QR</a>
+          <a href="/patient/dashboard/<%= patient.phone %>" class="btn btn-primary">📊 My Dashboard</a>
+          <a href="/" class="btn btn-outline-primary ms-2">Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

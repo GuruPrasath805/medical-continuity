@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>My Health Dashboard – Medical Continuity</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('../partials/navbar') %>
+<div class="container py-5">
+
+  <!-- Patient Header Card -->
+  <div class="card-box mb-4">
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <% if(patient.photo){ %>
+        <img src="<%= patient.photo %>" class="patient-photo">
+      <% } else { %>
+        <div class="patient-photo-placeholder">👤</div>
+      <% } %>
+      <div style="flex:1">
+        <h4 style="color:var(--green);font-weight:800;margin:0"><%= patient.name %></h4>
+        <p class="text-muted mb-1">📞 <%= patient.phone %>
+          <% if(patient.gender){%> &nbsp;|&nbsp; <%= patient.gender %><% } %>
+          <% if(patient.dateOfBirth){%> &nbsp;|&nbsp; DOB: <%= patient.dateOfBirth %><% } %>
+        </p>
+        <div>
+          <% if(patient.bloodGroup){   %><span class="badge-red    me-1">🩸 <%= patient.bloodGroup %></span><% } %>
+          <% if(patient.allergies){    %><span class="badge-yellow me-1">⚠️ <%= patient.allergies %></span><% } %>
+          <% if(patient.chronicDiseases){%><span class="badge-blue me-1">🏥 <%= patient.chronicDiseases %></span><% } %>
+        </div>
+        <p class="mb-0 mt-1" style="font-size:0.88rem">
+          🆘 Emergency: <strong><%= patient.emergencyName %></strong>
+          (<%= patient.emergencyRelation || 'Contact' %>) —
+          <strong style="color:var(--danger)"><%= patient.emergencyContact %></strong>
+        </p>
+      </div>
+      <!-- QR Code -->
+      <% if(patient.qrCode){ %>
+        <div class="text-center">
+          <div style="background:white;border:2px solid var(--green);padding:10px;border-radius:12px">
+            <img src="<%= patient.qrCode %>" style="width:100px;height:100px">
+          </div>
+          <a href="<%= patient.qrCode %>" download="my-health-qr.png"
+             style="font-size:0.8rem;color:var(--green);display:block;margin-top:4px">⬇ Download QR</a>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Upload Report -->
+  <div class="card-box mb-4">
+    <h5 style="color:var(--green);font-weight:800">📤 Upload My Medical Report</h5>
+    <p class="text-muted small mb-3">You can upload your scan reports, doctor prescriptions, lab reports, X-rays or any medical documents.</p>
+
+    <% if(error){   %><div class="alert-danger  mb-3 p-3 rounded"><%= error %></div><% } %>
+    <% if(success){ %><div class="alert-success mb-3 p-3 rounded">✅ <%= success %></div><% } %>
+
+    <form method="POST" action="/patient/upload-report/<%= patient.phone %>" enctype="multipart/form-data">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Report Title *</label>
+          <input type="text" name="title" class="form-control" placeholder="Blood Test / X-Ray / MRI / Prescription..." required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Description (optional)</label>
+          <input type="text" name="description" class="form-control" placeholder="Short note about this report...">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Select File * (Image or PDF)</label>
+          <input type="file" name="reportFile" class="form-control" accept="image/*,.pdf" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">📤 Upload Report</button>
+    </form>
+  </div>
+
+  <!-- My Uploaded Reports -->
+  <div class="card-box">
+    <h5 style="color:var(--green);font-weight:800">
+      🗂️ My Uploaded Reports
+      <span style="font-size:0.9rem;font-weight:500;color:var(--muted)">(<%= patient.reports ? patient.reports.length : 0 %> total)</span>
+    </h5>
+
+    <% if(!patient.reports || patient.reports.length === 0){ %>
+      <div class="text-center py-4">
+        <div style="font-size:3rem">📂</div>
+        <p class="text-muted mt-2">No reports uploaded yet.<br>Use the form above to upload your first report.</p>
+      </div>
+    <% } else { %>
+      <div class="row g-3 mt-1">
+        <% patient.reports.slice().reverse().forEach(r => { %>
+        <div class="col-md-4">
+          <div class="card-box" style="padding:1rem">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <strong style="font-size:0.92rem;color:var(--green-dark)"><%= r.title %></strong>
+              <small class="text-muted"><%= new Date(r.uploadedAt).toLocaleDateString('en-IN') %></small>
+            </div>
+            <% if(r.description){ %><p class="text-muted small mb-2"><%= r.description %></p><% } %>
+            <% if(r.fileUrl){ %>
+              <!-- Try to show as image, fallback to PDF link -->
+              <a href="<%= r.fileUrl %>" target="_blank">
+                <img src="<%= r.fileUrl %>"
+                  style="width:100%;max-height:140px;object-fit:cover;border-radius:8px;border:1px solid var(--border)"
+                  onerror="this.style.display='none';document.getElementById('pdf_<%= r._id %>').style.display='block'">
+              </a>
+              <div id="pdf_<%= r._id %>" style="display:none;background:var(--green-light);border-radius:8px;padding:1rem;text-align:center">
+                <div style="font-size:2rem">📄</div>
+                <a href="<%= r.fileUrl %>" target="_blank" class="btn btn-outline-primary btn-sm mt-1">View PDF</a>
+              </div>
+            <% } %>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+</div>
+<%- include('../partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

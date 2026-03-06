@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><title>Add Record – Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="/">🏥 Medical Continuity</a>
+    <a class="nav-link text-white ms-auto" href="/admin/patients">← Back to Patients</a>
+  </div>
+</nav>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card-box">
+        <h4 style="color:var(--green);font-weight:800">Upload Medical Report</h4>
+        <p class="text-muted small mb-4">Patient: <strong><%= patient.name %></strong> | <%= patient.phone %></p>
+        <% if(error){%><div class="alert-danger mb-3 p-3 rounded"><%= error %></div><% } %>
+        <form method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label">Report Title *</label>
+            <input type="text" name="title" class="form-control" placeholder="Blood Test, X-Ray, MRI..." required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description / Notes</label>
+            <textarea name="description" class="form-control" rows="3" placeholder="Diagnosis, findings..."></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Report Image / PDF</label>
+            <input type="file" name="reportImage" class="form-control" accept="image/*,.pdf">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Save Report</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

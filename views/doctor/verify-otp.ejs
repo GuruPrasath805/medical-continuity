@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Verify OTP</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('../partials/navbar') %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card-box">
+        <div class="text-center mb-4">
+          <div style="font-size:3rem">🔐</div>
+          <h3 style="color:var(--green);font-weight:800">Verify OTP</h3>
+          <p class="text-muted small">OTP sent to patient: <strong><%= phone %></strong><% if(patientName){ %> (<%= patientName %>)<% } %></p>
+        </div>
+
+        <% if (message) { %><div class="alert-success mb-3 p-3 rounded"><%= message %></div><% } %>
+        <% if (error)   { %><div class="alert-danger  mb-3 p-3 rounded"><%= error %></div><% } %>
+
+        <!-- DEV MODE BOX — remove in production -->
+        <% if (devOtp) { %>
+        <div class="dev-otp-box mb-3">
+          🛠️ DEV MODE — OTP:
+          <div style="font-size:2rem;letter-spacing:8px;color:#92400e;margin-top:4px"><%= devOtp %></div>
+          <small style="font-weight:400">Also shown in VS Code terminal. Remove devOtp in production.</small>
+        </div>
+        <% } %>
+
+        <form method="POST" action="/doctor/verify-otp">
+          <input type="hidden" name="phone" value="<%= phone %>">
+          <div class="mb-3">
+            <label class="form-label">Enter 6-Digit OTP</label>
+            <input type="text" name="otp" class="form-control text-center"
+              maxlength="6" pattern="\d{6}" placeholder="• • • • • •"
+              style="font-size:1.8rem;letter-spacing:10px;font-weight:700" required autofocus>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Verify & View Full Records</button>
+        </form>
+        <p class="text-center mt-3"><a href="/doctor/dashboard" class="text-muted small">← Back to Dashboard</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

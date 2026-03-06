@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Patient Registration – Medical Continuity</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('../partials/navbar') %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card-box">
+
+        <div class="text-center mb-4">
+          <h2 style="color:var(--green);font-weight:800">Create Your Health ID</h2>
+          <p class="text-muted">Fill all details carefully. This data will be shown to doctors after OTP verification.</p>
+        </div>
+
+        <% if (error) { %><div class="alert-danger mb-3 p-3 rounded"><%= error %></div><% } %>
+
+        <form method="POST" action="/patient/register" enctype="multipart/form-data">
+
+          <!-- BASIC INFO -->
+          <div class="form-section">👤 Basic Information</div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Full Name *</label>
+              <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone Number * <small class="text-muted">(OTP sent here)</small></label>
+              <input type="text" name="phone" class="form-control" placeholder="+91 9876543210" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Date of Birth</label>
+              <input type="date" name="dateOfBirth" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Gender</label>
+              <select name="gender" class="form-select">
+                <option value="">Select</option>
+                <option>Male</option><option>Female</option><option>Other</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Blood Group</label>
+              <select name="bloodGroup" class="form-select">
+                <option value="">Select</option>
+                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+              </select>
+            </div>
+            <div class="col-md-8">
+              <label class="form-label">Address</label>
+              <input type="text" name="address" class="form-control" placeholder="City, State">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Photo</label>
+              <input type="file" name="photo" class="form-control" accept="image/*">
+            </div>
+          </div>
+
+          <!-- EMERGENCY CONTACT -->
+          <div class="form-section">🆘 Emergency Contact <small style="font-weight:400;color:var(--muted)">(shown to public when QR is scanned)</small></div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Contact Name *</label>
+              <input type="text" name="emergencyName" class="form-control" placeholder="Parent / Spouse" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Contact Phone *</label>
+              <input type="text" name="emergencyContact" class="form-control" placeholder="+91 9876543210" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Relation</label>
+              <input type="text" name="emergencyRelation" class="form-control" placeholder="Father / Mother / Spouse">
+            </div>
+          </div>
+
+          <!-- MEDICAL INFO -->
+          <div class="form-section">🏥 Medical Information</div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Known Allergies</label>
+              <input type="text" name="allergies" class="form-control" placeholder="Penicillin, Dust, Pollen...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Chronic Diseases</label>
+              <input type="text" name="chronicDiseases" class="form-control" placeholder="Diabetes, Hypertension...">
+            </div>
+          </div>
+
+          <!-- MEDICINES LAST 1 YEAR -->
+          <div class="form-section">💊 Medicines Taken in Last 1 Year</div>
+          <div id="medicineContainer">
+            <div class="dynamic-row">
+              <button type="button" class="remove-row" onclick="removeRow(this)">✕</button>
+              <div class="row g-2">
+                <div class="col-md-3"><input type="text" name="medicineName[]"     class="form-control" placeholder="Medicine name"></div>
+                <div class="col-md-3"><input type="text" name="medicineDosage[]"   class="form-control" placeholder="Dosage (eg: 500mg)"></div>
+                <div class="col-md-3"><input type="text" name="medicineDuration[]" class="form-control" placeholder="Duration (eg: 3 months)"></div>
+                <div class="col-md-3"><input type="text" name="medicineReason[]"   class="form-control" placeholder="Reason / Disease"></div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="addMedicine()">+ Add Medicine</button>
+
+          <!-- MEDICAL HISTORY -->
+          <div class="form-section">📋 Medical History</div>
+          <div id="historyContainer">
+            <div class="dynamic-row">
+              <button type="button" class="remove-row" onclick="removeRow(this)">✕</button>
+              <div class="row g-2">
+                <div class="col-md-2"><input type="date" name="historyDate[]"      class="form-control" placeholder="Date"></div>
+                <div class="col-md-3"><input type="text" name="historyHospital[]"  class="form-control" placeholder="Hospital / Clinic"></div>
+                <div class="col-md-3"><input type="text" name="historyDiagnosis[]" class="form-control" placeholder="Diagnosis"></div>
+                <div class="col-md-2"><input type="text" name="historyTreatment[]" class="form-control" placeholder="Treatment"></div>
+                <div class="col-md-2"><input type="text" name="historyDoctor[]"    class="form-control" placeholder="Doctor name"></div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="addHistory()">+ Add History</button>
+
+          <div class="mt-4">
+            <button type="submit" class="btn btn-primary w-100" style="padding:0.75rem;font-size:1rem">Generate My QR Code →</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function addMedicine() {
+  const div = document.createElement('div');
+  div.className = 'dynamic-row';
+  div.innerHTML = `
+    <button type="button" class="remove-row" onclick="removeRow(this)">✕</button>
+    <div class="row g-2">
+      <div class="col-md-3"><input type="text" name="medicineName[]"     class="form-control" placeholder="Medicine name"></div>
+      <div class="col-md-3"><input type="text" name="medicineDosage[]"   class="form-control" placeholder="Dosage (eg: 500mg)"></div>
+      <div class="col-md-3"><input type="text" name="medicineDuration[]" class="form-control" placeholder="Duration (eg: 3 months)"></div>
+      <div class="col-md-3"><input type="text" name="medicineReason[]"   class="form-control" placeholder="Reason / Disease"></div>
+    </div>`;
+  document.getElementById('medicineContainer').appendChild(div);
+}
+function addHistory() {
+  const div = document.createElement('div');
+  div.className = 'dynamic-row';
+  div.innerHTML = `
+    <button type="button" class="remove-row" onclick="removeRow(this)">✕</button>
+    <div class="row g-2">
+      <div class="col-md-2"><input type="date"  name="historyDate[]"      class="form-control"></div>
+      <div class="col-md-3"><input type="text"  name="historyHospital[]"  class="form-control" placeholder="Hospital / Clinic"></div>
+      <div class="col-md-3"><input type="text"  name="historyDiagnosis[]" class="form-control" placeholder="Diagnosis"></div>
+      <div class="col-md-2"><input type="text"  name="historyTreatment[]" class="form-control" placeholder="Treatment"></div>
+      <div class="col-md-2"><input type="text"  name="historyDoctor[]"    class="form-control" placeholder="Doctor name"></div>
+    </div>`;
+  document.getElementById('historyContainer').appendChild(div);
+}
+function removeRow(btn) {
+  btn.parentElement.remove();
+}
+</script>
+</body>
+</html>

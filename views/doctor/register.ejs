@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Doctor Register</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('../partials/navbar') %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card-box">
+        <div class="text-center mb-4">
+          <div style="font-size:3rem">🏥</div>
+          <h3 style="color:var(--green);font-weight:800">Doctor Registration</h3>
+          <p class="text-muted small">Submit credentials for admin review before login</p>
+        </div>
+        <div class="alert-info p-3 rounded mb-3">
+          ℹ️ Your account will be activated only after admin reviews and approves your medical license.
+        </div>
+        <% if (error) { %><div class="alert-danger mb-3 p-3 rounded"><%= error %></div><% } %>
+        <form method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label">Full Name *</label>
+            <input type="text" name="name" class="form-control" placeholder="Dr. John Smith" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email *</label>
+            <input type="email" name="email" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password *</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Medical License (image or PDF) *</label>
+            <input type="file" name="license" class="form-control" accept="image/*,.pdf" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Submit for Approval</button>
+        </form>
+        <p class="text-center mt-3"><a href="/doctor/login" style="color:var(--green)">Already registered? Login</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
